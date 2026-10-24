@@ -9,18 +9,21 @@ const corsHeaders = {
 };
 
 Deno.serve(async (req) => {
+  const json = (data: unknown, status = 200) =>
+    new Response(JSON.stringify(data), {
+      status,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+      },
+    });
+
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  const json = (data: unknown, status = 200) =>
-    new Response(JSON.stringify(data), {
-      status,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-
   if (req.method !== "POST") {
-    return json({ error: "Method not allowed" }, 405);
+    return json({ error: "Method not allowed." }, 405);
   }
 
   const url = Deno.env.get("SUPABASE_URL");
@@ -29,24 +32,32 @@ Deno.serve(async (req) => {
   const authHeader = req.headers.get("Authorization");
 
   if (!url || !anonKey || !serviceKey || !authHeader) {
+    console.error("Missing server configuration or authorization header.");
     return json({ error: "Server configuration is incomplete." }, 500);
   }
 
   try {
     const userClient = createClient(url, anonKey, {
       global: { headers: { Authorization: authHeader } },
-      auth: { persistSession: false, autoRefreshToken: false },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
     });
 
     const { data: authData, error: authError } =
       await userClient.auth.getUser();
 
     if (authError || !authData.user) {
+      console.error("User authentication failed:", authError?.message);
       return json({ error: "Please sign in again." }, 401);
     }
 
     const adminClient = createClient(url, serviceKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
     });
 
     const { data: profile, error: profileError } = await adminClient
@@ -55,11 +66,38 @@ Deno.serve(async (req) => {
       .eq("id", authData.user.id)
       .maybeSingle();
 
-    if (profileError || profile?.role !== "admin") {
-      return json({ error: "Administrator access required." }, 403);
+    if (profileError) {
+      console.error("Administrator profile lookup failed:", {
+        userId: authData.user.id,
+        message: profileError.message,
+        code: profileError.code,
+      });
+
+      return json({
+        error: "Could not verify administrator profile. Check function logs.",
+      }, 500);
     }
 
-    const body = await req.json();
+    if (!profile || profile.role !== "admin") {
+      console.error("Administrator check rejected:", {
+        userId: authData.user.id,
+        profileFound: Boolean(profile),
+        role: profile?.role ?? null,
+      });
+
+      return json({
+        error: "Administrator access required. Check that you signed in with the correct account.",
+      }, 403);
+    }
+
+    let body;
+
+    try {
+      body = await req.json();
+    } catch {
+      return json({ error: "Invalid request data." }, 400);
+    }
+
     const fullName = String(body.full_name || "").trim();
     const email = String(body.email || "").trim().toLowerCase();
     const password = String(body.password || "");
@@ -68,10 +106,11 @@ Deno.serve(async (req) => {
       fullName.length < 2 ||
       fullName.length > 100 ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      password.length < 12
+      password.length < 12 ||
+      password.length > 128
     ) {
       return json({
-        error: "Enter a valid name and email. Password must be at least 12 characters.",
+        error: "Enter a valid name and email. Password must be 12–128 characters.",
       }, 400);
     }
 
@@ -84,6 +123,7 @@ Deno.serve(async (req) => {
       });
 
     if (createError || !created.user) {
+      console.error("Employee account creation failed:", createError?.message);
       return json({
         error: createError?.message || "Could not create employee account.",
       }, 400);
@@ -98,8 +138,21 @@ Deno.serve(async (req) => {
       });
 
     if (insertError) {
-      await adminClient.auth.admin.deleteUser(created.user.id);
-      return json({ error: "Could not save employee profile." }, 500);
+      console.error("Employee profile creation failed:", {
+        message: insertError.message,
+        code: insertError.code,
+      });
+
+      const { error: rollbackError } =
+        await adminClient.auth.admin.deleteUser(created.user.id);
+
+      if (rollbackError) {
+        console.error("Employee account cleanup failed:", rollbackError.message);
+      }
+
+      return json({
+        error: "Could not save employee profile. Check function logs.",
+      }, 500);
     }
 
     return json({
@@ -110,7 +163,12 @@ Deno.serve(async (req) => {
         email,
       },
     }, 201);
-  } catch {
-    return json({ error: "Unexpected server error." }, 500);
+  } catch (error) {
+    console.error(
+      "Unexpected create-employee error:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+
+    return json({ error: "Unexpected server error. Check function logs." }, 500);
   }
 });
