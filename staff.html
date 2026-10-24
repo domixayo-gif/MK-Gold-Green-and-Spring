@@ -2,297 +2,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Staff Portal | MK Gold Green and Spring</title>
-  <meta name="robots" content="noindex, nofollow">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f6f2;
-      color: #203127;
-    }
-    header {
-      background: #123c2b;
-      color: white;
-      padding: 24px 16px;
-      text-align: center;
-    }
-    header h1 { margin: 0 0 8px; font-size: 23px; }
-    header p { margin: 0; color: #d5e8d8; }
-    main { width: min(620px, 94%); margin: 24px auto; }
-    .card {
-      background: white;
-      border-radius: 14px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 18px #183c2b12;
-    }
-    h2 { margin-top: 0; font-size: 20px; }
-    label { display: block; margin: 14px 0 6px; font-weight: bold; }
-    input {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ccd5cd;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      margin-top: 16px;
-      padding: 13px;
-      border: 0;
-      border-radius: 8px;
-      background: #17613e;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .55; }
-    .secondary { background: #34483b; }
-    .hidden { display: none !important; }
-    #message { white-space: pre-wrap; overflow-wrap: anywhere; }
-    .note { color: #657368; font-size: 13px; line-height: 1.5; }
-    footer { text-align: center; padding: 20px; color: #657368; font-size: 13px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Staff Portal | MK Gold Green and Spring</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f6f2;color:#203127;font-family:Arial,sans-serif}
+header{background:#123c2b;color:white;text-align:center;padding:24px 12px}
+header h1{font-size:23px;margin:0 0 8px}
+main{width:min(760px,94%);margin:22px auto}
+.card{background:white;border-radius:13px;padding:20px;margin-bottom:17px;box-shadow:0 4px 18px #183c2b12}
+h2{font-size:20px;margin-top:0}
+label{display:block;font-weight:bold;margin:13px 0 6px}
+input{width:100%;padding:12px;border:1px solid #ccd5cd;border-radius:8px;font-size:16px}
+button{width:100%;padding:13px;margin-top:12px;border:0;border-radius:8px;background:#17613e;color:white;font-size:16px;font-weight:bold}
+button:disabled{opacity:.55}
+.secondary{background:#34483b}
+.danger{background:#a52c2c}
+.hidden{display:none!important}
+.note{font-size:13px;color:#657368;line-height:1.5}
+#message{white-space:pre-wrap;overflow-wrap:anywhere}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid #e2e9e3;white-space:nowrap}
+th{background:#edf3ed}
+footer{text-align:center;padding:20px;color:#657368;font-size:13px}
+</style>
 </head>
 <body>
-  <header>
-    <h1>MK Gold Green and Spring</h1>
-    <p>Staff Attendance and Administration Portal</p>
-  </header>
+<header>
+<h1>MK Gold Green and Spring</h1>
+<p>Staff Attendance and Administration Portal</p>
+</header>
 
-  <main>
-    <section id="loginCard" class="card">
-      <h2>Staff Sign In</h2>
-      <p>Sign in using the email and password provided to you.</p>
+<main>
+<section id="loginCard" class="card">
+<h2>Staff Sign In</h2>
+<p>Sign in with the email and password provided to you.</p>
+<form id="loginForm">
+<label for="loginEmail">Email address</label>
+<input id="loginEmail" type="email" autocomplete="username" required>
+<label for="loginPassword">Password</label>
+<input id="loginPassword" type="password" autocomplete="current-password" required>
+<button id="loginButton">Sign In</button>
+</form>
+</section>
 
-      <form id="loginForm">
-        <label for="loginEmail">Email address</label>
-        <input id="loginEmail" type="email" autocomplete="username"
-          required>
+<section id="dashboard" class="hidden">
+<div class="card">
+<h2 id="welcome">Staff Dashboard</h2>
+<p id="roleText"></p>
+<button id="logoutButton" class="secondary" type="button">Sign Out</button>
+</div>
 
-        <label for="loginPassword">Password</label>
-        <input id="loginPassword" type="password"
-          autocomplete="current-password" required>
+<section id="attendanceCard" class="card">
+<h2>My Attendance</h2>
+<p id="attendanceStatus">Loading attendance...</p>
+<p id="clockedInAt" class="note"></p>
+<button id="clockInButton" type="button">Clock In</button>
+<button id="clockOutButton" class="danger hidden" type="button">Clock Out</button>
+<button id="refreshButton" class="secondary" type="button">Refresh Attendance</button>
+<h3>My Recent Records</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Clock In</th><th>Clock Out</th></tr></thead>
+<tbody id="myRecords"><tr><td colspan="2">Loading...</td></tr></tbody>
+</table>
+</div>
+</section>
 
-        <button id="loginButton" type="submit">Sign In</button>
-      </form>
-    </section>
+<section id="adminPanel" class="card hidden">
+<h2>Create Employee Account</h2>
+<form id="employeeForm">
+<label for="employeeName">Employee full name</label>
+<input id="employeeName" maxlength="100" autocomplete="name" required>
+<label for="employeeEmail">Employee email</label>
+<input id="employeeEmail" type="email" autocomplete="email" required>
+<label for="employeePassword">Temporary password</label>
+<input id="employeePassword" type="password" minlength="12" autocomplete="new-password" required>
+<p class="note">Use a unique password of at least 12 characters. Give it to the employee privately.</p>
+<button id="createButton">Create Employee</button>
+</form>
 
-    <section id="dashboard" class="hidden">
-      <div class="card">
-        <h2 id="welcome">Staff Dashboard</h2>
-        <p id="roleText"></p>
-        <p class="note">
-          Your access depends on your assigned staff role.
-        </p>
-        <button id="logoutButton" class="secondary" type="button">
-          Sign Out
-        </button>
-      </div>
+<hr style="margin:24px 0;border:0;border-top:1px solid #ddd">
+<h2>All Staff Attendance</h2>
+<button id="adminRefreshButton" class="secondary" type="button">Refresh Report</button>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Employee</th><th>Clock In</th><th>Clock Out</th></tr></thead>
+<tbody id="adminRecords"><tr><td colspan="3">Loading...</td></tr></tbody>
+</table>
+</div>
+</section>
+</section>
 
-      <section id="adminPanel" class="card hidden">
-        <h2>Create Employee Account</h2>
-        <p>Use this form to create an employee's sign-in details.</p>
+<div id="message" class="card hidden" role="status" aria-live="polite"></div>
+</main>
+<footer>MK Gold Green and Spring · Staff Portal</footer>
 
-        <form id="employeeForm">
-          <label for="employeeName">Employee full name</label>
-          <input id="employeeName" type="text" maxlength="100"
-            autocomplete="name" required>
+<script>
+const SUPABASE_URL = "https://bstihqcxjotojkwdmdnf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ui97RvQpyn1M0viF66BuAw_zGaJGRfE";
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const $ = id => document.getElementById(id);
+let currentUser = null;
+let currentProfile = null;
 
-          <label for="employeeEmail">Employee email</label>
-          <input id="employeeEmail" type="email"
-            autocomplete="email" required>
+function message(text) {
+  $("message").textContent = text;
+  $("message").classList.remove("hidden");
+}
+function clearMessage() {
+  $("message").textContent = "";
+  $("message").classList.add("hidden");
+}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[ch]);
+}
+function showTime(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString();
+}
+function errorText(error) {
+  return error && error.message ? error.message : "Something went wrong. Please try again.";
+}
 
-          <label for="employeePassword">Temporary password</label>
-          <input id="employeePassword" type="password"
-            minlength="12" autocomplete="new-password" required>
+async function loadDashboard(user) {
+  currentUser = user;
+  clearMessage();
 
-          <p class="note">
-            Use a unique password of at least 12 characters.
-            Give it to the employee privately.
-          </p>
+  const {data: profile, error} = await client
+    .from("staff_profiles")
+    .select("id,full_name,role")
+    .eq("id", user.id)
+    .maybeSingle();
 
-          <button id="createButton" type="submit">
-            Create Employee
-          </button>
-        </form>
-      </section>
+  if (error || !profile) {
+    currentUser = null;
+    currentProfile = null;
+    $("dashboard").classList.add("hidden");
+    $("loginCard").classList.remove("hidden");
+    message(error ? error.message : "No staff profile found. Contact the administrator.");
+    return;
+  }
 
-      <section class="card">
-        <h2>Attendance</h2>
-        <p>
-          Attendance clock-in, clock-out, and administrator reports
-          will be enabled after the database permissions and secure
-          attendance actions are configured.
-        </p>
-      </section>
-    </section>
+  currentProfile = profile;
+  $("loginCard").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("welcome").textContent = "Welcome, " + profile.full_name;
+  $("roleText").textContent = "Account role: " + profile.role;
+  $("adminPanel").classList.toggle("hidden", profile.role !== "admin");
 
-    <div id="message" class="card hidden" role="status"
-      aria-live="polite"></div>
-  </main>
+  await loadAttendance();
+}
 
-  <footer>MK Gold Green and Spring · Staff Portal</footer>
+async function loadAttendance() {
+  if (!currentUser || !currentProfile) return;
 
-  <script>
-    const SUPABASE_URL =
-      "https://bstihqcxjotojkwdmdnf.supabase.co";
+  $("attendanceStatus").textContent = "Loading attendance...";
+  $("clockInButton").disabled = true;
+  $("clockOutButton").disabled = true;
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_ui97RvQpyn1M0viF66BuAw_zGaJGRfE";
+  const {data: rows, error} = await client
+    .from("staff_attendance")
+    .select("id,employee_id,clock_in,clock_out")
+    .eq("employee_id", currentUser.id)
+    .order("clock_in", {ascending:false})
+    .limit(30);
 
-    const client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+  if (error) {
+    $("attendanceStatus").textContent = "Could not load attendance.";
+    $("myRecords").innerHTML = "<tr><td colspan='2'>Unable to load records.</td></tr>";
+    message("Attendance loading error: " + error.message);
+    return;
+  }
 
-    const $ = (id) => document.getElementById(id);
+  const openRecord = (rows || []).find(row => !row.clock_out);
+  $("attendanceStatus").textContent = openRecord
+    ? "You are currently clocked in."
+    : "You are currently clocked out.";
 
-    function showMessage(text) {
-      $("message").textContent = text;
-      $("message").classList.remove("hidden");
+  $("clockedInAt").textContent = openRecord
+    ? "Current session started: " + showTime(openRecord.clock_in)
+    : "";
+
+  $("clockInButton").classList.toggle("hidden", Boolean(openRecord));
+  $("clockOutButton").classList.toggle("hidden", !openRecord);
+  $("clockInButton").disabled = Boolean(openRecord);
+  $("clockOutButton").disabled = !openRecord;
+
+  $("myRecords").innerHTML = rows && rows.length
+    ? rows.map(row => "<tr><td>" + escapeHtml(showTime(row.clock_in)) +
+      "</td><td>" + escapeHtml(showTime(row.clock_out)) + "</td></tr>").join("")
+    : "<tr><td colspan='2'>No attendance records yet.</td></tr>";
+
+  if (currentProfile.role === "admin") await loadAdminReport();
+}
+
+async function loadAdminReport() {
+  if (!currentProfile || currentProfile.role !== "admin") return;
+
+  $("adminRecords").innerHTML = "<tr><td colspan='3'>Loading report...</td></tr>";
+
+  const [attendanceResult, profilesResult] = await Promise.all([
+    client.from("staff_attendance")
+      .select("id,employee_id,clock_in,clock_out")
+      .order("clock_in", {ascending:false})
+      .limit(100),
+    client.from("staff_profiles").select("id,full_name")
+  ]);
+
+  if (attendanceResult.error || profilesResult.error) {
+    $("adminRecords").innerHTML = "<tr><td colspan='3'>Could not load report.</td></tr>";
+    message("Admin report error: " + errorText(attendanceResult.error || profilesResult.error));
+    return;
+  }
+
+  const names = {};
+  (profilesResult.data || []).forEach(profile => {
+    names[profile.id] = profile.full_name;
+  });
+
+  const rows = attendanceResult.data || [];
+  $("adminRecords").innerHTML = rows.length
+    ? rows.map(row => "<tr><td>" +
+      escapeHtml(names[row.employee_id] || "Unknown employee") +
+      "</td><td>" + escapeHtml(showTime(row.clock_in)) +
+      "</td><td>" + escapeHtml(showTime(row.clock_out)) +
+      "</td></tr>").join("")
+    : "<tr><td colspan='3'>No attendance records yet.</td></tr>";
+}
+
+async function runClockAction(action) {
+  clearMessage();
+  $("clockInButton").disabled = true;
+  $("clockOutButton").disabled = true;
+
+  try {
+    const {data, error} = await client.rpc(action);
+    if (error) throw error;
+    if (data && data.success === false) throw new Error(data.error || "Attendance action failed.");
+    message(action === "staff_clock_in" ? "Clock-in recorded successfully." : "Clock-out recorded successfully.");
+    await loadAttendance();
+  } catch (error) {
+    message(errorText(error));
+    await loadAttendance();
+  }
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  $("loginButton").disabled = true;
+  try {
+    const {data, error} = await client.auth.signInWithPassword({
+      email: $("loginEmail").value.trim(),
+      password: $("loginPassword").value
+    });
+    if (error) throw error;
+    await loadDashboard(data.user);
+  } catch (error) {
+    message(errorText(error));
+  } finally {
+    $("loginButton").disabled = false;
+  }
+});
+
+$("logoutButton").addEventListener("click", async () => {
+  const {error} = await client.auth.signOut();
+  currentUser = null;
+  currentProfile = null;
+  $("dashboard").classList.add("hidden");
+  $("loginCard").classList.remove("hidden");
+  if (error) message(error.message);
+  else {
+    clearMessage();
+    $("loginPassword").value = "";
+  }
+});
+
+$("clockInButton").addEventListener("click", () => runClockAction("staff_clock_in"));
+$("clockOutButton").addEventListener("click", () => runClockAction("staff_clock_out"));
+$("refreshButton").addEventListener("click", loadAttendance);
+$("adminRefreshButton").addEventListener("click", loadAdminReport);
+
+$("employeeForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  $("createButton").disabled = true;
+
+  try {
+    const {data: sessionData, error: sessionError} = await client.auth.getSession();
+    if (sessionError || !sessionData.session) throw new Error("Please sign in again.");
+    if (!currentProfile || currentProfile.role !== "admin") {
+      throw new Error("Administrator access required.");
     }
 
-    function clearMessage() {
-      $("message").textContent = "";
-      $("message").classList.add("hidden");
-    }
-
-    async function loadDashboard(user) {
-      clearMessage();
-
-      const { data: profile, error } = await client
-        .from("staff_profiles")
-        .select("full_name, role")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      if (error || !profile) {
-        await client.auth.signOut();
-        $("dashboard").classList.add("hidden");
-        $("loginCard").classList.remove("hidden");
-        showMessage(
-          "No staff profile was found for this account. " +
-          "Ask the administrator to check the account setup."
-        );
-        return;
+    const {data, error} = await client.functions.invoke("create-employee", {
+      body: {
+        full_name: $("employeeName").value.trim(),
+        email: $("employeeEmail").value.trim(),
+        password: $("employeePassword").value
       }
+    });
 
-      $("loginCard").classList.add("hidden");
-      $("dashboard").classList.remove("hidden");
-      $("welcome").textContent =
-        "Welcome, " + profile.full_name;
-      $("roleText").textContent =
-        "Account role: " + profile.role;
-
-      $("adminPanel").classList.toggle(
-        "hidden",
-        profile.role !== "admin"
-      );
-    }
-
-    $("loginForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearMessage();
-      $("loginButton").disabled = true;
-
+    if (error) {
+      let detail = error.message;
       try {
-        const { data, error } = await client.auth.signInWithPassword({
-          email: $("loginEmail").value.trim(),
-          password: $("loginPassword").value
-        });
-
-        if (error) throw error;
-
-        await loadDashboard(data.user);
-      } catch (error) {
-        showMessage(error.message || "Sign-in failed.");
-      } finally {
-        $("loginButton").disabled = false;
-      }
-    });
-
-    $("employeeForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearMessage();
-      $("createButton").disabled = true;
-
-      try {
-        const { data: sessionData, error: sessionError } =
-          await client.auth.getSession();
-
-        if (sessionError || !sessionData.session) {
-          throw new Error("Please sign in again.");
+        if (error.context) {
+          const response = await error.context.json();
+          if (response.error) detail = response.error;
         }
-
-        const { data, error } = await client.functions.invoke(
-          "create-employee",
-          {
-            body: {
-              full_name: $("employeeName").value.trim(),
-              email: $("employeeEmail").value.trim(),
-              password: $("employeePassword").value
-            }
-          }
-        );
-
-        if (error) {
-          let detail = error.message;
-          try {
-            if (error.context) {
-              const response = await error.context.json();
-              if (response.error) detail = response.error;
-            }
-          } catch (_) {}
-          throw new Error(detail);
-        }
-
-        if (data && data.error) {
-          throw new Error(data.error);
-        }
-
-        $("employeeForm").reset();
-        showMessage(
-          "Employee account created successfully. " +
-          "Provide the login details privately."
-        );
-      } catch (error) {
-        showMessage(error.message || "Could not create employee.");
-      } finally {
-        $("createButton").disabled = false;
-      }
-    });
-
-    $("logoutButton").addEventListener("click", async () => {
-      await client.auth.signOut();
-      $("dashboard").classList.add("hidden");
-      $("adminPanel").classList.add("hidden");
-      $("loginCard").classList.remove("hidden");
-      $("loginForm").reset();
-      clearMessage();
-    });
-
-    client.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        loadDashboard(session.user);
-      }
-    });
-
-    async function restoreSession() {
-      const { data } = await client.auth.getSession();
-      if (data.session) {
-        await loadDashboard(data.session.user);
-      }
+      } catch (_) {}
+      throw new Error(detail);
     }
+    if (data && data.error) throw new Error(data.error);
 
-    restoreSession();
-  </script>
+    $("employeeForm").reset();
+    message("Employee account created successfully. Provide the login details privately.");
+    await loadAdminReport();
+  } catch (error) {
+    message(errorText(error));
+  } finally {
+    $("createButton").disabled = false;
+  }
+});
+
+client.auth.getSession().then(async ({data, error}) => {
+  if (error) {
+    message(error.message);
+    return;
+  }
+  if (data.session) await loadDashboard(data.session.user);
+});
+</script>
 </body>
 </html>
