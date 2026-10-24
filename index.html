@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#073b2b">
+<meta name="description" content="MK Gold Green and Spring — job enquiries, scholarships, international assistance and appointments.">
+<title>MK Gold Green and Spring</title>
+
+<style>
+:root {
+  --green: #073b2b;
+  --green2: #105940;
+  --gold: #d9b65d;
+  --cream: #f7f5ed;
+  --text: #17271e;
+  --muted: #6d786f;
+  --border: #e0e5dd;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: white;
+  line-height: 1.6;
+}
+
+a { text-decoration: none; color: inherit; }
+
+button, input, select, textarea { font: inherit; }
+
+header {
+  background: var(--green);
+  color: white;
+  padding: 15px 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.logo {
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: Georgia, serif;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.brand strong, .brand small { display: block; }
+
+.brand strong {
+  font-size: 13px;
+  letter-spacing: 1.4px;
+}
+
+.brand small {
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+
+nav {
+  display: flex;
+  gap: 19px;
+  align-items: center;
+  font-size: 12px;
+}
+
+nav a:hover { color: var(--gold); }
+
+.menu-button {
+  display: none;
+  color: white;
+  background: transparent;
+  border: 1px solid #ffffff66;
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+
+.hero {
+  background: var(--green);
+  color: white;
+  padding: 75px 8%;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 35px;
+  align-items: center;
+}
+
+.eyebrow {
+  color: #a98223;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.hero .eyebrow { color: var(--gold); }
+
+h1, h2, h3 { line-height: 1.2; }
+
+h1, h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+}
+
+h1 {
+  font-size: clamp(42px, 5.5vw, 68px);
+  margin: 15px 0;
+}
+
+h1 span { color: var(--gold); font-style: italic; }
+
+.hero p { color: #dce9df; font-size: 14px; }
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 25px 0;
+}
+
+.btn {
+  display: inline-block;
+  text-align: center;
+  border: 0;
+  border-radius: 6px;
+  padding: 12px 17px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gold { background: var(--gold); color: #17271e; }
+.green { background: var(--green); color: white; }
+.outline { border: 1px solid white; color: white; background: transparent; }
+
+.hero-art {
+  min-height: 315px;
+  border: 1px solid #ffffff40;
+  border-radius: 180px 180px 5px 5px;
+  background: linear-gradient(150deg, #a27c31, #174e39 62%, #05291e);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  padding: 30px;
+}
+
+.art-card {
+  background: var(--cream);
+  color: var(--green);
+  padding: 28px;
+  width: 100%;
+  max-width: 290px;
+  box-shadow: 0 15px 40px #001a1033;
+}
+
+.art-card h2 { font-size: 30px; margin: 5px 0 12px; }
+.art-card p { color: var(--muted); font-size: 12px; }
+
+.notice {
+  border-left: 2px solid var(--gold);
+  padding-left: 12px;
+  font-size: 11px !important;
+  margin-top: 23px;
+}
+
+.steps {
+  display: flex;
+  gap: 15px;
+  justify-content: space-around;
+  padding: 22px 7%;
+  background: var(--cream);
+}
+
+.steps div { font-size: 12px; font-weight: bold; }
+.steps span { color: #a98223; margin-right: 8px; }
+
+section { padding: 70px 8%; }
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 28px;
+}
+
+.section-heading h2, .content h2, .staff h2 {
+  font-size: clamp(30px, 4vw, 43px);
+  margin: 5px 0;
+}
+
+.section-heading p, .content > p {
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 390px;
+}
+
+.job-grid, .three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 23px;
+  background: white;
+}
+
+.card-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  background: #edf3ed;
+  color: var(--green);
+  border-radius: 12px;
+  font-size: 21px;
+  margin-bottom: 16px;
+}
+
+.card h3 { font: normal 21px Georgia, serif; margin: 0 0 9px; }
+.card p { color: var(--muted); font-size: 12px; }
+.card button { margin-top: 8px; }
+
+.text-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #8e6b1d;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7%;
+  align-items: center;
+  background: var(--cream);
+}
+
+.visual {
+  background: var(--green);
+  color: white;
+  min-height: 340px;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.visual .big {
+  font: normal 45px/1.15 Georgia, serif;
+}
+
+.visual .eyebrow { color: var(--gold); }
+
+form { display: grid; gap: 13px; }
+
+label {
+  font-size: 11px;
+  font-weight: bold;
+  display: grid;
+  gap: 6px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d9e0d7;
+  border-radius: 6px;
+  background: white;
+  color: var(--text);
+  font-size: 13px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #d9b65d66;
+  border-color: #a98223;
+}
+
+textarea { resize: vertical; }
+
+.destination {
+  margin-top: 22px;
+  padding: 22px;
+  background: var(--cream);
+  border-radius: 10px;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.tags span {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 6px 11px;
+  font-size: 11px;
+}
+
+.appointment { background: var(--cream); }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 850px;
+}
+
+.full { grid-column: 1 / -1; }
+
+.staff {
+  background: var(--green);
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.staff p { color: #dce9df; font-size: 13px; }
+
+.staff-panel {
+  border: 1px solid #ffffff40;
+  border-radius: 12px;
+  padding: 27px;
+  background: #ffffff08;
+}
+
+.staff-panel h3 {
+  font: normal 25px Georgia, serif;
+}
+
+.staff-panel .notice { color: #dce9df; }
+
+.contact {
+  background: #f0e6c8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.contact h2 { margin: 5px 0; font: normal 35px Georgia, serif; }
+
+footer {
+  background: #04281d;
+  color: white;
+  padding: 30px 8%;
+  font-size: 11px;
+}
+
+footer p { color: #c3d4c8; }
+
+footer .brand { margin-bottom: 15px; }
+
+dialog {
+  width: min(550px, 94%);
+  max-height: 90vh;
+  overflow: auto;
+  border: 0;
+  border-radius: 13px;
+  padding: 25px;
+  box-shadow: 0 20px 70px #0005;
+}
+
+dialog::backdrop { background: #001a10b8; }
+
+.close-row { display: flex; justify-content: end; }
+.close-button {
+  border: 0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.small { color: var(--muted); font-size: 10px; }
+
+#message {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translate(-50%, 150%);
+  background: var(--green);
+  color: white;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 12px;
+  z-index: 20;
+  transition: transform .2s;
+}
+
+#message.show { transform: translate(-50%, 0); }
+
+@media (max-width: 800px) {
+  header { padding: 12px 5%; }
+  .menu-button { display: block; }
+  nav {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 70px;
+    background: var(--green);
+    padding: 15px 6%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  nav.open { display: flex; }
+  nav a { padding: 12px 0; border-bottom: 1px solid #ffffff20; }
+  .hero { grid-template-columns: 1fr; padding: 48px 6%; }
+  .hero-art { min-height: 265px; }
+  section { padding: 50px 6%; }
+  .job-grid, .three-grid { grid-template-columns: repeat(2, 1fr); }
+  .split, .staff { grid-template-columns: 1fr; gap: 30px; }
+  .section-heading { display: block; }
+  .section-heading p { margin-top: 12px; }
+  .steps { flex-direction: column; gap: 10px; }
+  .contact { align-items: start; flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .job-grid, .three-grid, .form-grid { grid-template-columns: 1fr; }
+  .full { grid-column: auto; }
+  h1 { font-size: 44px; }
+  .hero-art { min-height: 235px; }
+  .visual .big { font-size: 38px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a class="brand" href="#home">
+    <span class="logo">MK</span>
+    <span>
+      <strong>MK GOLD</strong>
+      <small>GREEN AND SPRING</small>
+    </span>
+  </a>
+
+  <button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button>
+
+  <nav id="navigation">
+    <a href="#jobs">Jobs</a>
+    <a href="#scholarships">Scholarships</a>
+    <a href="#international">International</a>
+    <a href="#appointments">Appointments</a>
+    <a href="#staff">Staff portal</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <div>
+      <div class="eyebrow">OPPORTUNITY • GROWTH • SERVICE</div>
+      <h1>Your next step<br><span>starts here.</span></h1>
+      <p>
+        Explore job categories, make scholarship enquiries, ask about
+        international opportunities, and request an appointment.
+      </p>
+
+      <div class="actions">
+        <a href="#jobs" class="btn gold">Explore opportunities</a>
+        <a href="#appointments" class="btn outline">Request appointment</a>
+      </div>
+
+      <p class="notice">
+        Job categories shown here are examples, not confirmed vacancies.
+        Applications and assistance requests are subject to verification.
+      </p>
+    </div>
+
+    <div class="hero-art">
+      <div class="art-card">
+        <div class="eyebrow">YOUR FUTURE MATTERS</div>
+        <h2>Discover.<br>Apply.<br>Move forward.</h2>
+        <p>MK Gold Green and Spring</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="steps">
+    <div><span>01</span> Explore opportunities</div>
+    <div><span>02</span> Send your enquiry</div>
+    <div><span>03</span> Await a verified response</div>
+  </div>
+
+  <section id="jobs">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">CAREER PATHWAYS</div>
+        <h2>Explore job categories</h2>
+      </div>
+      <p>Select a category to make an enquiry. Salary figures are not displayed.</p>
+    </div>
+
+    <div class="job-grid" id="jobGrid"></div>
+  </section>
+
+  <section class="split" id="scholarships">
+    <div class="visual">
+      <div class="eyebrow">EDUCATION • GROWTH • ACHIEVEMENT</div>
+      <div class="big">Invest in<br>your next<br>chapter.</div>
+      <div>MK GOLD GREEN AND SPRING</div>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow">EDUCATION SUPPORT</div>
+      <h2>Scholarship enquiries</h2>
+      <p>
+        Tell us about your educational goals and the support you are seeking.
+        Eligibility and availability must be verified.
+      </p>
+
+      <form class="whatsapp-form" data-subject="Scholarship enquiry">
+        <label>Full name
+          <input name="Full name" required autocomplete="name">
+        </label>
+        <label>Email address
+          <input name="Email address" type="email" required autocomplete="email">
+        </label>
+        <label>Education level
+          <select name="Education level" required>
+            <option value="">Choose education level</option>
+            <option>Secondary school</option>
+            <option>Undergraduate</option>
+            <option>Postgraduate</option>
+            <option>Vocational or technical</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>What support are you seeking?
+          <textarea name="Details" rows="3" required></textarea>
+        </label>
+        <button type="submit" class="btn green">Continue via WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="international">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">INTERNATIONAL ENQUIRIES</div>
+        <h2>Explore your options</h2>
+      </div>
+      <p>Ask questions about overseas work, sponsorship information or financial assistance.</p>
+    </div>
+
+    <div class="three-grid">
+      <article class="card">
+        <div class="card-icon">↗</div>
+        <h3>Overseas job enquiries</h3>
+        <p>Tell us about your work experience and preferred destination.</p>
+        <button class="text-button" data-enquiry="Overseas job enquiry">Start enquiry ↗</button>
+      </article>
+
+      <article class="card">
+        <div class="card-icon">◎</div>
+        <h3>Sponsorship information</h3>
+        <p>Ask about possible pathways. A visa, sponsorship or job offer is not guaranteed.</p>
+        <button class="text-button" data-enquiry="Sponsorship information enquiry">Request information ↗</button>
+      </article>
+
+      <article class="card">
+        <div class="card-icon">＋</div>
+        <h3>Financial assistance</h3>
+        <p>Describe the type of assistance you are seeking for review.</p>
+        <button class="text-button" data-enquiry="Financial assistance enquiry">Make an enquiry ↗</button>
+      </article>
+    </div>
+
+    <div class="destination">
+      <div class="eyebrow">DESTINATIONS OF INTEREST</div>
+      <div class="tags">
+        <span>United Kingdom</span>
+        <span>United States</span>
+        <span>Canada</span>
+        <span>France</span>
+        <span>Japan</span>
+        <span>Germany</span>
+        <span>Other European countries</span>
+        <span>Other destinations</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="appointment" id="appointments">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">LET'S TALK</div>
+        <h2>Request an appointment</h2>
+      </div>
+      <p>Your preferred date and time are requests only. The team must confirm your appointment.</p>
+    </div>
+
+    <form class="whatsapp-form form-grid" data-subject="Appointment request">
+      <label>Full name
+        <input name="Full name" required autocomplete="name">
+      </label>
+
+      <label>Phone number
+        <input name="Phone number" required inputmode="tel" autocomplete="tel">
+      </label>
+
+      <label>Email address
+        <input name="Email address" type="email" autocomplete="email">
+      </label>
+
+      <label>Appointment topic
+        <select name="Appointment topic" required>
+          <option value="">Choose topic</option>
+          <option>Job enquiry</option>
+          <option>Scholarship enquiry</option>
+          <option>Overseas opportunity</option>
+          <option>Financial assistance</option>
+          <option>General enquiry</option>
+        </select>
+      </label>
+
+      <label>Preferred date
+        <input name="Preferred date" type="date" required id="appointmentDate">
+      </label>
+
+      <label>Preferred time
+        <select name="Preferred time" required>
+          <option value="">Choose time</option>
+          <option>9:00 AM</option>
+          <option>10:00 AM</option>
+          <option>11:00 AM</option>
+          <option>12:00 PM</option>
+          <option>1:00 PM</option>
+          <option>2:00 PM</option>
+          <option>3:00 PM</option>
+          <option>4:00 PM</option>
+        </select>
+      </label>
+
+      <label class="full">Additional details
+        <textarea name="Additional details" rows="3"></textarea>
+      </label>
+
+      <button class="btn green full" type="submit">Send appointment request</button>
+    </form>
+  </section>
+
+  <section class="staff" id="staff">
+    <div>
+      <div class="eyebrow">PRIVATE STAFF WORKSPACE</div>
+      <h2>Staff attendance portal</h2>
+      <p>
+        The planned staff portal will let employees sign in, clock in and out,
+        and review their own attendance history. Authorised managers will
+        have access to staff records.
+      </p>
+      <p class="notice">
+        Secure login, attendance records and the admin dashboard still need
+        to be connected to Firebase before use.
+      </p>
+    </div>
+
+    <div class="staff-panel">
+      <div class="eyebrow">STAFF ACCESS</div>
+      <h3>Staff sign-in</h3>
+      <p>The secure portal is not activated in this first version.</p>
+      <button class="btn gold" id="staffInfoButton">View setup information</button>
+      <p id="staffInfo" class="notice" hidden>
+        Next, configure Firebase Authentication and secure database rules.
+        Employee accounts must be created by an authorised administrator.
+        No password should be stored in this public website file.
+      </p>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div>
+      <div class="eyebrow">NEED HELP?</div>
+      <h2>Talk to our team.</h2>
+      <p>Send a message directly through WhatsApp.</p>
+    </div>
+    <a class="btn green" id="contactButton" target="_blank" rel="noopener">
+      Chat on WhatsApp ↗
+    </a>
+  </section>
+</main>
+
+<footer>
+  <div class="brand">
+    <span class="logo">MK</span>
+    <span><strong>MK GOLD</strong><small>GREEN AND SPRING</small></span>
+  </div>
+
+  <p>© <span id="year"></span> MK Gold Green and Spring.</p>
+  <p>
+    Verify all opportunities and organisations independently.
+    Never pay an unverified person for a job, visa, scholarship or sponsorship promise.
+  </p>
+</footer>
+
+<dialog id="enquiryDialog">
+  <form method="dialog" class="close-row">
+    <button class="close-button" aria-label="Close">×</button>
+  </form>
+
+  <div class="eyebrow">INTERNATIONAL ENQUIRY</div>
+  <h2 id="dialogHeading">Make an enquiry</h2>
+
+  <form class="whatsapp-form" id="internationalForm" data-subject="International enquiry">
+    <label>Full name
+      <input name="Full name" required autocomplete="name">
+    </label>
+    <label>Phone number
+      <input name="Phone number" required inputmode="tel" autocomplete="tel">
+    </label>
+    <label>Email address
+      <input name="Email address" type="email" required autocomplete="email">
+    </label>
+    <label>Preferred destination
+      <select name="Preferred destination" required>
+        <option value="">Choose destination</option>
+        <option>United Kingdom</option>
+        <option>United States</option>
+        <option>Canada</option>
+        <option>France</option>
+        <option>Japan</option>
+        <option>Germany</option>
+        <option>Other European country</option>
+        <option>Other destination</option>
+        <option>Not sure yet</option>
+        <option>Not applicable</option>
+      </select>
+    </label>
+    <label>Tell us about your enquiry
+      <textarea name="Enquiry details" rows="4" required></textarea>
+    </label>
+
+    <button class="btn green" type="submit">Continue via WhatsApp</button>
+    <p class="small">Your message will be prepared in WhatsApp. You must press Send there.</p>
+  </form>
+</dialog>
+
+<div id="message" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* Official WhatsApp contact supplied for the website.
+   International format without the plus sign. */
+const WHATSAPP_NUMBER = "2347055801559";
+
+const jobCategories = [
+  ["Factory work", "Factory production, packaging and general work.", "▦"],
+  ["Bread factory", "Bakery production, packing and distribution.", "♨"],
+  ["Barbering", "Barbering, grooming and salon-related work.", "✂"],
+  ["Office work", "Administration, reception and office support.", "▤"],
+  ["Sales and customer service", "Retail, sales and customer support.", "↗"],
+  ["Cleaning services", "Cleaning and facility support.", "✧"],
+  ["Driving and logistics", "Driving, deliveries and logistics.", "➜"],
+  ["Security services", "Security and site-support work.", "◈"],
+  ["Skilled and technical work", "Trade, maintenance and technical work.", "⚙"]
+];
+
+const jobGrid = document.getElementById("jobGrid");
+
+jobCategories.forEach(function(job) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const icon = document.createElement("div");
+  icon.className = "card-icon";
+  icon.textContent = job[2];
+
+  const heading = document.createElement("h3");
+  heading.textContent = job[0];
+
+  const description = document.createElement("p");
+  description.textContent = job[1];
+
+  const button = document.createElement("button");
+  button.className = "text-button";
+  button.type = "button";
+  button.textContent = "Enquire about this category ↗";
+  button.addEventListener("click", function() {
+    sendWhatsApp("Job category — " + job[0], {});
+  });
+
+  card.append(icon, heading, description, button);
+  jobGrid.appendChild(card);
+});
+
+function sendWhatsApp(subject, data) {
+  const lines = [
+    "Hello MK Gold Green and Spring.",
+    "Enquiry: " + subject
+  ];
+
+  Object.entries(data).forEach(function(entry) {
+    if (entry[1]) {
+      lines.push(entry[0] + ": " + entry[1]);
+    }
+  });
+
+  lines.push("", "Please let me know the next steps. Thank you.");
+
+  const url = "https://wa.me/" + WHATSAPP_NUMBER +
+    "?text=" + encodeURIComponent(lines.join("\n"));
+
+  window.open(url, "_blank", "noopener,noreferrer");
+  showMessage("WhatsApp is opening. Review your message and press Send.");
+}
+
+function showMessage(text) {
+  const box = document.getElementById("message");
+  box.textContent = text;
+  box.classList.add("show");
+
+  window.setTimeout(function() {
+    box.classList.remove("show");
+  }, 3500);
+}
+
+document.querySelectorAll(".whatsapp-form").forEach(function(form) {
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    const data = {};
+    new FormData(form).forEach(function(value, key) {
+      if (String(value).trim()) data[key] = String(value).trim();
+    });
+
+    sendWhatsApp(form.dataset.subject || "Website enquiry", data);
+
+    const dialog = form.closest("dialog");
+    if (dialog) dialog.close();
+
+    form.reset();
+  });
+});
+
+const dialog = document.getElementById("enquiryDialog");
+const dialogHeading = document.getElementById("dialogHeading");
+const internationalForm = document.getElementById("internationalForm");
+
+document.querySelectorAll("[data-enquiry]").forEach(function(button) {
+  button.addEventListener("click", function() {
+    const subject = button.dataset.enquiry;
+    dialogHeading.textContent = subject;
+    internationalForm.dataset.subject = subject;
+    dialog.showModal();
+  });
+});
+
+document.getElementById("contactButton").href =
+  "https://wa.me/" + WHATSAPP_NUMBER +
+  "?text=" + encodeURIComponent(
+    "Hello MK Gold Green and Spring. I would like to make an enquiry."
+  );
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const menuButton = document.getElementById("menuButton");
+const navigation = document.getElementById("navigation");
+
+menuButton.addEventListener("click", function() {
+  navigation.classList.toggle("open");
+});
+
+navigation.querySelectorAll("a").forEach(function(link) {
+  link.addEventListener("click", function() {
+    navigation.classList.remove("open");
+  });
+});
+
+document.getElementById("staffInfoButton").addEventListener("click", function() {
+  const info = document.getElementById("staffInfo");
+  info.hidden = !info.hidden;
+});
+
+const dateInput = document.getElementById("appointmentDate");
+const localDate = new Date();
+const year = localDate.getFullYear();
+const month = String(localDate.getMonth() + 1).padStart(2, "0");
+const day = String(localDate.getDate()).padStart(2, "0");
+
+dateInput.min = year + "-" + month + "-" + day;
+</script>
+
+</body>
+</html>
